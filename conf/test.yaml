@@ -1,0 +1,6 @@
+db_meta:
+  host: localhost
+  port: 9527
+  user: atguigu
+  password: Atguigu.123
+  database: meta
