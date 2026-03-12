@@ -3,7 +3,7 @@
     @Time: 2026/3/11 12:55 
     @Author: RunDong
     @Email: 18303620306@163.com
-    @File: data-agent/mysql_client.py
+    @File: data-agent/mysql_client_manager.py
     @Software: PyCharm
     @Description: Mysql 客户端
 ------------------------------------------------
@@ -15,7 +15,6 @@ from sqlalchemy import text
 
 from conf.app_config import app_config, DBConfig
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine, AsyncSession, async_sessionmaker
-
 
 class MysqlClientManager:
     def __init__(self, db_config: DBConfig):
