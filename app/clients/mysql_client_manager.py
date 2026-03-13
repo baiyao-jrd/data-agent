@@ -33,7 +33,7 @@ class MysqlClientManager:
             pool_pre_ping = True,
         )
         self.session_factory = async_sessionmaker(
-            bind = dw_mysql_client_manager.engine,
+            bind = self.engine,
             autoflush = True, # 查询前自动flush，防止与数据库数据不一致
             expire_on_commit = False # 如果设置为True, commit之后，属性失效，异步情况下势必大概率会重新查询属性，此时报错，为避免出现异常，这里设置为False
         )

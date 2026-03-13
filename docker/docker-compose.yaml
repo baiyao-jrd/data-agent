@@ -9,7 +9,7 @@ services:
       MYSQL_USER: atguigu
       MYSQL_PASSWORD: Atguigu.123
     ports:
-      - "3306:3306"
+      - "9527:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./mysql:/docker-entrypoint-initdb.d
@@ -50,17 +50,23 @@ services:
       - qdrant_data:/qdrant/storage
 
   embedding:
-    image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.8
+    image: ddosify/text-embeddings-inference:cpu-1.6.0
+#    platform: linux/arm64
     container_name: embedding
     restart: unless-stopped
     ports:
       - "8081:80"
     environment:
-      MODEL_ID: /models/bge-large-zh-v1.5
+      MODEL_ID: BAAI/bge-large-zh-v1.5
       MAX_CONCURRENT_REQUESTS: "16"
       MAX_BATCH_TOKENS: "16384"
+      HF_ENDPOINT: https://hf-mirror.com
     volumes:
       - ./embedding/bge-large-zh-v1.5:/models/bge-large-zh-v1.5
+    command: >
+      --model-id BAAI/bge-large-zh-v1.5
+      --port 80
+#      --huggingface-hub-cache /data
 
 volumes:
   mysql_data:
