@@ -49,24 +49,53 @@ services:
     volumes:
       - qdrant_data:/qdrant/storage
 
+#  embedding:
+##    image: ddosify/text-embeddings-inference:cpu-1.6.0
+#    image: ghcr.io/huggingface/text-embeddings-inference:cpu-latest
+##    platform: linux/arm64
+#    container_name: embedding
+#    restart: unless-stopped
+#    ports:
+#      - "8081:80"
+#    environment:
+#      MODEL_ID: BAAI/bge-large-zh-v1.5
+#      MAX_CONCURRENT_REQUESTS: "16"
+#      MAX_BATCH_TOKENS: "16384"
+#      HF_ENDPOINT: https://hf-mirror.com
+#    volumes:
+#      - ./embedding/bge-large-zh-v1.5:/models/bge-large-zh-v1.5
+#    command: >
+#      --model-id BAAI/bge-large-zh-v1.5
+#      --port 80
+##      --huggingface-hub-cache /data
+
   embedding:
-    image: ddosify/text-embeddings-inference:cpu-1.6.0
-#    platform: linux/arm64
+    image: ghcr.io/huggingface/text-embeddings-inference:cpu-latest
+    platform: linux/amd64
     container_name: embedding
     restart: unless-stopped
     ports:
       - "8081:80"
-    environment:
-      MODEL_ID: BAAI/bge-large-zh-v1.5
-      MAX_CONCURRENT_REQUESTS: "16"
-      MAX_BATCH_TOKENS: "16384"
-      HF_ENDPOINT: https://hf-mirror.com
     volumes:
       - ./embedding/bge-large-zh-v1.5:/models/bge-large-zh-v1.5
-    command: >
-      --model-id BAAI/bge-large-zh-v1.5
-      --port 80
-#      --huggingface-hub-cache /data
+      - ./config:/config
+    command:
+      - --model-id
+      - /models/bge-large-zh-v1.5
+      - --port
+      - "80"
+      - --max-batch-tokens # batch token 数
+      - "16384"
+      - --max-batch-requests # 最大并发请求数
+      - "32"
+      - --max-client-batch-size # 客户端最大批量大小
+      - "32"
+      - --dtype # 计算精度
+      - float32
+      - --pooling # embedding pooling
+      - cls
+    environment:
+      - RAYON_NUM_THREADS=4
 
 volumes:
   mysql_data:

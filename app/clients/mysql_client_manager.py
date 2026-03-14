@@ -13,7 +13,7 @@ from typing import Optional
 
 from sqlalchemy import text
 
-from conf.app_config import app_config, DBConfig
+from app.conf.app_config import app_config, DBConfig
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine, AsyncSession, async_sessionmaker
 
 class MysqlClientManager:

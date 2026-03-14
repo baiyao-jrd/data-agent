@@ -16,7 +16,7 @@ class MetaMysqlRepository:
         self.session = session
 
     async def save_tables_info(self, tables_info):
-        pass
+        self.session.add_all(tables_info)
 
     async def save_columns_info(self, columns_info):
-        pass
+        self.session.add_all(columns_info)
