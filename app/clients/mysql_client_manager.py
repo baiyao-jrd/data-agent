@@ -38,8 +38,8 @@ class MysqlClientManager:
             expire_on_commit = False # 如果设置为True, commit之后，属性失效，异步情况下势必大概率会重新查询属性，此时报错，为避免出现异常，这里设置为False
         )
 
-    def close(self):
-        self.engine.dispose()
+    async def close(self):
+        await self.engine.dispose()
 
 meta_mysql_client_manager = MysqlClientManager(app_config.db_meta)
 dw_mysql_client_manager = MysqlClientManager(app_config.db_dw)

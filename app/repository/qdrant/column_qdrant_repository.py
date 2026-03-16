@@ -11,8 +11,8 @@
 from qdrant_client import AsyncQdrantClient
 from qdrant_client.models import PointStruct, VectorParams, Distance
 
-from conf.app_config import app_config
-from models.qdrant.column_info_qdrant import ColumnInfoQdrant
+from app.conf.app_config import app_config
+from app.models.qdrant.column_info_qdrant import ColumnInfoQdrant
 
 
 class ColumnQdrantRepository:
@@ -22,7 +22,7 @@ class ColumnQdrantRepository:
         self.qdrant_client = qdrant_client
 
     async def ensure_create_collection(self):
-        if not await self.qdrant_client.collection_exists("my_collection"):
+        if not await self.qdrant_client.collection_exists(self.collection_name):
             await self.qdrant_client.create_collection(
                 collection_name=self.collection_name,
                 vectors_config=VectorParams(

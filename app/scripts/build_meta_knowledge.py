@@ -14,15 +14,16 @@ import argparse
 import asyncio
 from pathlib import Path
 
-from app.core.logger import logger
-from app.core.context import request_id_ctx_var
 from app.service.meta_knowledge_service import MetaKnowledgeService
 from app.clients.mysql_client_manager import meta_mysql_client_manager, dw_mysql_client_manager
-from app.repository.dw_mysql_repository import DwMysqlRepository
-from app.repository.meta_mysql_repository import MetaMysqlRepository
-from clients.embedding_client_manager import embedding_client_manager
-from clients.qdrant_client_manager import qdrant_client_manager
-from repository.column_qdrant_repository import ColumnQdrantRepository
+from app.repository.mysql.dw_mysql_repository import DwMysqlRepository
+from app.repository.mysql.meta_mysql_repository import MetaMysqlRepository
+from app.clients.embedding_client_manager import embedding_client_manager
+from app.clients.es_client_manager import es_client_manager
+from app.clients.qdrant_client_manager import qdrant_client_manager
+from app.repository.qdrant.column_qdrant_repository import ColumnQdrantRepository
+from app.repository.es.value_es_repository import ValueEsRepository
+from app.repository.qdrant.metric_qdrant_repository import MetricQdrantRepository
 
 
 async def build(config_path: Path):
@@ -31,19 +32,29 @@ async def build(config_path: Path):
     dw_mysql_client_manager.init()
     qdrant_client_manager.init()
     embedding_client_manager.init()
+    es_client_manager.init()
     async with meta_mysql_client_manager.session_factory() as mysql_session, dw_mysql_client_manager.session_factory() as dw_session:
         meta_mysql_repository = MetaMysqlRepository(mysql_session)
         dw_mysql_repository = DwMysqlRepository(dw_session)
         column_qdrant_repository = ColumnQdrantRepository(qdrant_client_manager.client)
         embedding_client = embedding_client_manager.client
+        value_es_repository = ValueEsRepository(es_client_manager.client)
+        metric_qdrant_repository = MetricQdrantRepository(qdrant_client_manager.client)
 
         meta_knowledge_service = MetaKnowledgeService(
             meta_mysql_repository=meta_mysql_repository,
             dw_mysql_repository=dw_mysql_repository,
             column_qdrant_repository=column_qdrant_repository,
-            embedding_client=embedding_client
+            embedding_client=embedding_client,
+            value_es_repository=value_es_repository,
+            metric_qdrant_repository=metric_qdrant_repository
         )
         await meta_knowledge_service.build(config_path)
+
+    await meta_mysql_client_manager.close()
+    await dw_mysql_client_manager.close()
+    await qdrant_client_manager.close()
+    await es_client_manager.close()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

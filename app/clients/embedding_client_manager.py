@@ -11,7 +11,7 @@
 from typing import Optional
 from langchain_huggingface import HuggingFaceEndpointEmbeddings
 
-from conf.app_config import EmbeddingConfig, app_config
+from app.conf.app_config import EmbeddingConfig, app_config
 
 
 class EmbeddingClientManager:

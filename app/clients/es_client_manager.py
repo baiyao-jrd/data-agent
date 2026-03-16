@@ -11,7 +11,7 @@
 import asyncio
 from typing import Optional
 
-from conf.app_config import ESConfig, app_config
+from app.conf.app_config import ESConfig, app_config
 from elasticsearch import AsyncElasticsearch
 
 class EsClientManager:

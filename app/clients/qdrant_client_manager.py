@@ -12,8 +12,7 @@ import asyncio
 import random
 from typing import Optional
 
-import numpy as np
-from conf.app_config import QdrantConfig, app_config
+from app.conf.app_config import QdrantConfig, app_config
 from qdrant_client import AsyncQdrantClient, models
 
 
@@ -29,7 +28,8 @@ class QdrantClientManager:
     def init(self):
         self.client = AsyncQdrantClient(
             url=self.get_url(),
-            timeout=30
+            timeout=30,
+            check_compatibility=False
         )
 
     async def close(self):
