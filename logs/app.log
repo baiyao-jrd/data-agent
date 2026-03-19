@@ -63,3 +63,10 @@
 2026-03-16 15:07:29.679 | INFO     | request_id - f5570c40-6fc8-432c-af47-f092dc8ae51b | app.service.meta_knowledge_service:build:299 - 保存指标信息到meta数据库
 2026-03-16 15:07:39.428 | INFO     | request_id - 600b584d-5971-4d39-b232-f539ea6ab911 | app.service.meta_knowledge_service:build:303 - 为指标信息创建向量索引
 2026-03-16 15:07:39.428 | INFO     | request_id - 17f094d4-db02-4aca-a5ce-78db9bac2b26 | app.service.meta_knowledge_service:build:305 - 元数据知识库构建完成！
+2026-03-16 15:43:33.829 | INFO     | request_id - 989797a2-8eca-481f-a93c-ab409b7f7b12 | app.service.meta_knowledge_service:build:280 - 加载配置文件
+2026-03-16 15:43:34.009 | INFO     | request_id - 75831472-d37b-4768-9f04-4397b01aaa4e | app.service.meta_knowledge_service:build:285 - 保存表信息到meta数据库
+2026-03-16 15:44:15.148 | INFO     | request_id - ae8cf8bb-4513-4d86-9c8c-d6a0827923d2 | app.service.meta_knowledge_service:build:289 - 为字段信息创建向量索引
+2026-03-16 15:44:15.392 | INFO     | request_id - 5c876eb1-8af8-4aa6-a8f5-633f5ad9ff55 | app.service.meta_knowledge_service:build:293 - 为字段值信息创建全文索引
+2026-03-16 15:44:15.423 | INFO     | request_id - 646f3d79-184e-4b8a-904f-d50f742756fa | app.service.meta_knowledge_service:build:299 - 保存指标信息到meta数据库
+2026-03-16 15:44:20.935 | INFO     | request_id - 18c26a0c-0011-41fc-8729-6300d2629fdf | app.service.meta_knowledge_service:build:303 - 为指标信息创建向量索引
+2026-03-16 15:44:20.936 | INFO     | request_id - 347a9ee9-7a07-4f82-a294-ed05d89a1b52 | app.service.meta_knowledge_service:build:305 - 元数据知识库构建完成！

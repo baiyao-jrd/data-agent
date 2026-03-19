@@ -95,9 +95,9 @@ class MetaKnowledgeService:
                 )
 
         # 库表中已有数据 -> 此处注释, 测试完成后取消注释
-        # async with self.meta_mysql_repository.session.begin():  # 自动维护事务 -> 成功：自动提交事务；失败：自动回滚事务
-        #     await self.meta_mysql_repository.save_tables_info(tables_info)
-        #     await self.meta_mysql_repository.save_columns_info(columns_info)
+        async with self.meta_mysql_repository.session.begin():  # 自动维护事务 -> 成功：自动提交事务；失败：自动回滚事务
+            await self.meta_mysql_repository.save_tables_info(tables_info)
+            await self.meta_mysql_repository.save_columns_info(columns_info)
 
         return tables_info, columns_info
 

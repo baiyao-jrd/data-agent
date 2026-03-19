@@ -71,3 +71,20 @@ class ValueEsRepository:
                 operations.append(value_info)
 
             await self.es_client.bulk(operations=operations)
+
+    async def aquery(self, keyword: str, threshold: float = 0.6, limit: int = 5 ):
+        res = await self.es_client.search(
+            index=self.index_name,
+            query={
+                "match": {
+                    "value": keyword
+                }
+            },
+            min_score=threshold,
+            size=limit
+        )
+
+        await self.es_client.close()
+
+        return [hit["_source"] for hit in res["hits"]["hits"]]
+
