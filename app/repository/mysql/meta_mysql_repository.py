@@ -8,10 +8,13 @@
     @Description:
 ------------------------------------------------
 """
+from typing import Optional
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.mysql.column_metric_mysql import ColumnMetricMySQL
 from app.models.mysql.metric_info_mysql import MetricInfoMySQL
+from models.mysql.column_info_mysql import ColumnInfoMySQL
 
 
 class MetaMysqlRepository:
@@ -29,3 +32,9 @@ class MetaMysqlRepository:
 
     async def save_column_metric_infos(self, column_metric_infos: list[ColumnMetricMySQL]):
         self.session.add_all(column_metric_infos)
+
+    async def get_column_info_by_id(self, column_id: str) -> Optional[ColumnInfoMySQL]:
+        return await self.session.get( # 使用封装好的方法，直接通过属性ID获取数据
+            entity=ColumnInfoMySQL,
+            ident=column_id
+        )

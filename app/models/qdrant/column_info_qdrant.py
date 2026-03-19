@@ -8,15 +8,15 @@
     @Description:
 ------------------------------------------------
 """
-from typing import TypedDict
+from typing import TypedDict, Optional
 
 
 class ColumnInfoQdrant(TypedDict):
     id: str
-    name: str
-    type: str
-    role: str
-    examples: list
-    description: str
-    alias: list
-    table_id: str
+    name: Optional[str]
+    type: Optional[str]
+    role: Optional[str]
+    examples: Optional[dict | list]
+    description: Optional[str]
+    alias: Optional[dict | list]
+    table_id: Optional[str]

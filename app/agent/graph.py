@@ -32,8 +32,10 @@ from agent.nodes.validate_sql import validate_sql
 from agent.state import DataAgentState
 from clients.embedding_client_manager import embedding_client_manager
 from clients.es_client_manager import es_client_manager
+from clients.mysql_client_manager import meta_mysql_client_manager
 from clients.qdrant_client_manager import qdrant_client_manager
 from repository.es.value_es_repository import ValueEsRepository
+from repository.mysql.meta_mysql_repository import MetaMysqlRepository
 from repository.qdrant.column_qdrant_repository import ColumnQdrantRepository
 from repository.qdrant.metric_qdrant_repository import MetricQdrantRepository
 
@@ -102,31 +104,37 @@ if __name__ == '__main__':
         embedding_client_manager.init()
         qdrant_client_manager.init()
         es_client_manager.init()
+        meta_mysql_client_manager.init()
 
-        column_qdrant_repository = ColumnQdrantRepository(
-            qdrant_client=qdrant_client_manager.client
-        )
-        value_es_repository = ValueEsRepository(
-            es_client=es_client_manager.client
-        )
-        metric_qdrant_repository = MetricQdrantRepository(
-            client=qdrant_client_manager.client
-        )
-        context = DataAgentContext(
-            embedding_client=embedding_client_manager.client,
-            column_qdrant_repository=column_qdrant_repository,
-            value_es_repository=value_es_repository,
-            metric_qdrant_repository=metric_qdrant_repository,
-        )
-        async for chunk in graph.astream(
-                input=state,
-                context=context,
-                stream_mode="custom",
-        ):
-            print(chunk)
+        async with meta_mysql_client_manager.session_factory() as mysql_session:
+            column_qdrant_repository = ColumnQdrantRepository(
+                qdrant_client=qdrant_client_manager.client
+            )
+            value_es_repository = ValueEsRepository(
+                es_client=es_client_manager.client
+            )
+            metric_qdrant_repository = MetricQdrantRepository(
+                client=qdrant_client_manager.client
+            )
 
-        await qdrant_client_manager.close()
-        await es_client_manager.close()
+            meta_mysql_repository = MetaMysqlRepository(mysql_session)
+
+            context = DataAgentContext(
+                embedding_client=embedding_client_manager.client,
+                column_qdrant_repository=column_qdrant_repository,
+                value_es_repository=value_es_repository,
+                metric_qdrant_repository=metric_qdrant_repository,
+                meta_mysql_repository=meta_mysql_repository
+            )
+            async for chunk in graph.astream(
+                    input=state,
+                    context=context,
+                    stream_mode="custom",
+            ):
+                print(chunk)
+
+            await qdrant_client_manager.close()
+            await es_client_manager.close()
 
     asyncio.run(test())
 
