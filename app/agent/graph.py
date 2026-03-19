@@ -125,15 +125,22 @@ if __name__ == '__main__':
         ):
             print(chunk)
 
+        await qdrant_client_manager.close()
+        await es_client_manager.close()
+
     asyncio.run(test())
 
 """ output
-2026-03-19 09:44:31.781 | INFO     | request_id - c316a5f4-2aae-4852-ab1c-96def91abf3e | agent.nodes.extract_keywords:extract_keywords:51 
-    - ✋🏻查询的关键字为：['销售总额', '统计', '统计华北地区的销售总额', '华北地区']
-2026-03-19 09:44:33.121 | INFO     | request_id - 96f6c904-617b-4402-8fd4-bdb00898df21 | agent.nodes.recall_value:recall_value:62 
+2026-03-19 10:46:04.297 | INFO     | request_id - 152025c0-7d27-4583-96c2-27f12f747752 | agent.nodes.extract_keywords:extract_keywords:51 
+    - ✋🏻查询的关键字为：['统计华北地区的销售总额', '华北地区', '统计', '销售总额']
+2026-03-19 10:46:05.585 | INFO     | request_id - 0cb3dbb5-2482-4a4a-8aea-71b890bfdf81 | agent.nodes.recall_value:recall_value:62 
     - ✋🏻 召回字段取值：dict_keys(['dim_region.region_name.华北'])
-2026-03-19 09:44:33.700 | INFO     | request_id - e1463260-02ed-416f-8f53-a8efc6c86b3d | agent.nodes.recall_column:recall_column:50 
-    - 经扩展后的关键字列表为：['销售总额', '统计华北地区的销售总额', '销售额', '统计', '地区', '统计时间', '华北地区']
-2026-03-19 09:44:37.963 | INFO     | request_id - 51790f62-17f8-4911-95fc-77fecb589f70 | agent.nodes.recall_column:recall_column:74 
+2026-03-19 10:46:05.882 | INFO     | request_id - 9df2a82b-631c-4115-b717-9e6c6eb5016c | agent.nodes.recall_column:recall_column:50 
+    - 经扩展后的关键字列表为：['统计时间', '华北地区', '销售总额', '统计华北地区的销售总额', '销售额', '地区', '统计']
+2026-03-19 10:46:06.342 | INFO     | request_id - 7790a3a1-c92b-4f30-9994-394cc275fa98 | agent.nodes.recall_metric:recall_metric:50 
+    - 经扩展后的关键字列表为：['GMV', '华北地区', '销售额', '销售总额', '统计华北地区的销售总额', '交易额', '销售收入', '统计', '成交额']
+2026-03-19 10:46:08.737 | INFO     | request_id - 6bf07732-8f0f-48e6-93b0-9469c6e5e726 | agent.nodes.recall_column:recall_column:74 
     - 召回的字段信息为：['fact_order.order_amount', 'fact_order.order_quantity', 'dim_region.region_name', 'dim_region.province', 'dim_region.country', 'dim_region.region_id', 'fact_order.region_id']
+2026-03-19 10:46:09.176 | INFO     | request_id - cd63b34b-cb6c-446b-9b6c-1681f850c209 | agent.nodes.recall_metric:recall_metric:66 
+    - 召回的指标信息为：['GMV']
 """

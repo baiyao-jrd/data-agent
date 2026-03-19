@@ -52,3 +52,17 @@ class MetricQdrantRepository:
                 points=points
             )
 
+    async def aquery(
+            self,
+            vector: list[float],
+            score_threshold: float = 0.7,
+            limit: int = 10
+    ) -> list[MetricInfoQdrant]:
+        res = await self.client.query_points(
+            collection_name=self.collection_name,
+            query=vector,
+            score_threshold=score_threshold,
+            limit=limit
+        )
+
+        return [ point.payload for point in res.points ]
