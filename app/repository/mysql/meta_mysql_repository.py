@@ -10,11 +10,13 @@
 """
 from typing import Optional
 
+from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.mysql.column_metric_mysql import ColumnMetricMySQL
 from app.models.mysql.metric_info_mysql import MetricInfoMySQL
 from models.mysql.column_info_mysql import ColumnInfoMySQL
+from models.mysql.table_info_mysql import TableInfoMySQL
 
 
 class MetaMysqlRepository:
@@ -38,3 +40,27 @@ class MetaMysqlRepository:
             entity=ColumnInfoMySQL,
             ident=column_id
         )
+
+    async def get_table_info_by_id(self, table_id: str) -> Optional[TableInfoMySQL]:
+        return await self.session.get( # 使用封装好的方法，直接通过表ID获取数据
+            entity=TableInfoMySQL,
+            ident=table_id
+        )
+
+    async def get_key_columns_info_by_table_id(self, table_id: str) -> list[ColumnInfoMySQL]:
+        sql = """
+            select
+                *
+            from column_info
+            where table_id = :table_id
+                and type in ('primary_key', 'foreign_key')
+        """
+
+        query = select(ColumnInfoMySQL).from_statement(text(sql))
+
+        res = await self.session.execute(
+            statement=query,
+            params={"table_id": table_id}
+        )
+
+        return list(res.scalars().fetchall())

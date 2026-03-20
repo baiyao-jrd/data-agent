@@ -15,7 +15,7 @@ from models.qdrant.column_info_qdrant import ColumnInfoQdrant
 from models.qdrant.metric_info_qdrant import MetricInfoQdrant
 
 
-class ColumnRecallInfoState:
+class ColumnRecallInfoState(TypedDict):
     name: str
     type: str
     role: str
