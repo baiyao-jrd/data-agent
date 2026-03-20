@@ -11,7 +11,7 @@
 from pathlib import Path
 
 def load_prompt(name: str) -> str:
-    file = Path(__file__).parents[2] / "prompts" / f"{name}.prompt"
+    file = Path(__file__).parents[2] / "prompts" / f"{name}.pmt"
     return file.read_text(encoding="utf-8")
 
 if __name__ == '__main__':
