@@ -38,7 +38,7 @@ async def filter_table(state: DataAgentState, runtime: Runtime[DataAgentContext]
     res = await chain.ainvoke(
         input={
             "query": query,
-            "table_infos": yaml.dump(table_infos) # 以yaml格式传入
+            "table_infos": yaml.dump(table_infos, allow_unicode=True, sort_keys=False) # 以yaml格式传入
         }
     )
 
