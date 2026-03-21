@@ -531,3 +531,32 @@ SELECT SUM(fo.order_amount) AS 销售总额
 FROM fact_order fo
 JOIN dim_region dr ON fo.region_id = dr.region_id
 WHERE dr.region_name = '华北';
+2026-03-21 14:11:35.839 | INFO     | request_id - 68be59d0-8431-44ca-be5f-487f6817c67d | agent.nodes.extract_keywords:extract_keywords:51 - ✋🏻查询的关键字为：['统计华北地区的销售总额', '统计', '销售总额', '华北地区']
+2026-03-21 14:11:37.530 | INFO     | request_id - 0b43e967-2e71-4c56-abdc-39795532c1c5 | agent.nodes.recall_value:recall_value:62 - ✋🏻 召回字段取值：dict_keys(['dim_region.region_name.华北'])
+2026-03-21 14:11:37.596 | INFO     | request_id - c76b7b44-40e3-4424-9aed-63d644505d8d | agent.nodes.recall_column:recall_column:50 - 经扩展后的关键字列表为：['统计时间', '销售总额', '地区', '统计华北地区的销售总额', '销售额', '统计', '华北地区']
+2026-03-21 14:11:38.132 | INFO     | request_id - 988483c9-0d97-4bf5-8952-ce0d60f05200 | agent.nodes.recall_metric:recall_metric:50 - 经扩展后的关键字列表为：['交易额', '销售总额', 'GMV', '统计华北地区的销售总额', '销售收入', '成交额', '销售额', '统计', '华北地区']
+2026-03-21 14:11:49.277 | INFO     | request_id - b58885a0-fa30-4773-b8d5-f3a2868fa9be | agent.nodes.recall_column:recall_column:74 - 召回的字段信息为：['fact_order.order_amount', 'fact_order.order_quantity', 'dim_region.region_name', 'dim_region.province', 'dim_region.country', 'dim_region.region_id', 'fact_order.region_id']
+2026-03-21 14:11:50.048 | INFO     | request_id - d1e1aa08-97c9-44d1-8365-845ed09b1da7 | agent.nodes.recall_metric:recall_metric:66 - 召回的指标信息为：['GMV']
+2026-03-21 14:11:50.170 | INFO     | request_id - 1832b541-df2e-4c34-871c-2bb7a4197b63 | agent.nodes.merge_retrieved_info:merge_retrieved_info:123 - ✅合并召回信息完成: 表信息 -> ['fact_order', 'dim_region'], 指标信息 -> ['GMV']
+2026-03-21 14:11:51.396 | INFO     | request_id - 55449f99-545e-4789-9c45-853eb6f52e95 | agent.nodes.filter_metric:filter_metric:45 - yaml.dump(metric_infos) ::::: 
+- name: GMV
+  description: 全称Gross Merchandise Value，表示所有订单的成交金额总和。
+  relevant_columns:
+  - fact_order.order_amount
+  alias:
+  - 成交总额
+  - 订单总额
+
+2026-03-21 14:11:51.397 | INFO     | request_id - c29d2b02-8c28-4a69-ae36-42abf429e6a1 | agent.nodes.filter_metric:filter_metric:58 - 过滤后的指标信息为：['GMV']
+2026-03-21 14:11:52.397 | INFO     | request_id - f4b3cc1d-e171-44ed-a26e-31ef5808bf61 | agent.nodes.filter_table:filter_table:62 - 过滤后的表信息为：['fact_order', 'dim_region']
+2026-03-21 14:11:52.433 | INFO     | request_id - 6905eda7-c764-4af4-83a7-90b6f1e7ee42 | agent.nodes.add_extra_context:add_extra_context:41 - 
+额外的上下文信息: 
+ - 时间信息：{'date': '2026-03-21', 'weekday': 'Saturday', 'quarter': 'Q1'}
+ - 数据库信息：{'dialect': 'mysql', 'version': '8.0.45'}
+2026-03-21 14:11:55.237 | INFO     | request_id - b8a3968c-22b1-4706-8806-970c8b230b8f | agent.nodes.generate_sql:generate_sql:52 - 
+生成的SQL: 
+SELECT SUM(fo.order_amount) AS 销售总额
+FROM fact_order fo
+JOIN dim_region dr ON fo.region_id = dr.region_id
+WHERE dr.region_name = '华北';
+2026-03-21 14:11:55.268 | INFO     | request_id - b49dbefc-3359-44f7-8205-f7a68656e279 | agent.nodes.validate_sql:validate_sql:30 - ✅SQL校验成功

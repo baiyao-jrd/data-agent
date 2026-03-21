@@ -38,3 +38,6 @@ class DwMysqlRepository:
             dialect=dialect,
             version=version
         )
+
+    async def validate_sql(self, statement: str):
+        await self.session.execute(text(f"explain {statement}"))
