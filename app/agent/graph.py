@@ -32,9 +32,10 @@ from agent.nodes.validate_sql import validate_sql
 from agent.state import DataAgentState
 from clients.embedding_client_manager import embedding_client_manager
 from clients.es_client_manager import es_client_manager
-from clients.mysql_client_manager import meta_mysql_client_manager
+from clients.mysql_client_manager import meta_mysql_client_manager, dw_mysql_client_manager
 from clients.qdrant_client_manager import qdrant_client_manager
 from repository.es.value_es_repository import ValueEsRepository
+from repository.mysql.dw_mysql_repository import DwMysqlRepository
 from repository.mysql.meta_mysql_repository import MetaMysqlRepository
 from repository.qdrant.column_qdrant_repository import ColumnQdrantRepository
 from repository.qdrant.metric_qdrant_repository import MetricQdrantRepository
@@ -105,8 +106,10 @@ if __name__ == '__main__':
         qdrant_client_manager.init()
         es_client_manager.init()
         meta_mysql_client_manager.init()
+        dw_mysql_client_manager.init()
 
-        async with meta_mysql_client_manager.session_factory() as mysql_session:
+        async with (meta_mysql_client_manager.session_factory() as meta_mysql_session,
+                    dw_mysql_client_manager.session_factory() as dw_mysql_session):
             column_qdrant_repository = ColumnQdrantRepository(
                 qdrant_client=qdrant_client_manager.client
             )
@@ -117,14 +120,16 @@ if __name__ == '__main__':
                 client=qdrant_client_manager.client
             )
 
-            meta_mysql_repository = MetaMysqlRepository(mysql_session)
+            meta_mysql_repository = MetaMysqlRepository(meta_mysql_session)
+            dw_mysql_repository = DwMysqlRepository(dw_mysql_session)
 
             context = DataAgentContext(
                 embedding_client=embedding_client_manager.client,
                 column_qdrant_repository=column_qdrant_repository,
                 value_es_repository=value_es_repository,
                 metric_qdrant_repository=metric_qdrant_repository,
-                meta_mysql_repository=meta_mysql_repository
+                meta_mysql_repository=meta_mysql_repository,
+                dw_mysql_repository=dw_mysql_repository
             )
             async for chunk in graph.astream(
                     input=state,

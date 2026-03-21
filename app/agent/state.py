@@ -35,6 +35,15 @@ class MetricRecallInfoState(TypedDict):
     relevant_columns: list[str]
     alias: list
 
+class DateInfoState(TypedDict):
+    date: str
+    weekday: str
+    quarter: str
+
+class DbInfoState(TypedDict):
+    dialect: str
+    version: str
+
 class DataAgentState(TypedDict):
     """ 1. 查询 & 关键字 """
     query: str # 用户输入的查询
@@ -49,3 +58,7 @@ class DataAgentState(TypedDict):
     """ 3. 合并后的召回信息: 表 & 指标 信息 """
     table_infos: list[TableRecallInfoState]
     metric_infos: list[MetricRecallInfoState]
+
+    """ 4. 添加额外的上下文信息: 时间 & 数据库 """
+    date_info: DateInfoState # 当前时间
+    db_info: DbInfoState # 数据库环境信息

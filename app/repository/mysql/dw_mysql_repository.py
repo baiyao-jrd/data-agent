@@ -11,6 +11,8 @@
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from agent.state import DbInfoState
+
 
 class DwMysqlRepository:
     def __init__(self, session: AsyncSession): # 只有持有 session 才能进行读写操作
@@ -26,3 +28,13 @@ class DwMysqlRepository:
         res = await self.session.execute(text(sql))
         # return [row[0] for row in res.fetchall()]
         return res.scalars().all() # 效果等价于上面的语句
+
+    async def get_db_info(self):
+        sql = "select version()"
+        version = (await self.session.execute(text(sql))).scalar()
+        dialect = self.session.get_bind().dialect.name
+
+        return DbInfoState(
+            dialect=dialect,
+            version=version
+        )
