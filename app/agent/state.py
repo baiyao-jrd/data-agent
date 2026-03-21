@@ -62,3 +62,6 @@ class DataAgentState(TypedDict):
     """ 4. 添加额外的上下文信息: 时间 & 数据库 """
     date_info: DateInfoState # 当前时间
     db_info: DbInfoState # 数据库环境信息
+
+    """ 5. sql """
+    sql: str # 生成的sql语句
